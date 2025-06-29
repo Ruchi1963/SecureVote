@@ -1,12 +1,13 @@
   # Import required modules
-import dotenv
 import os
-import mysql.connector
-from fastapi import FastAPI, HTTPException, status, Request
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.encoders import jsonable_encoder
-from mysql.connector import errorcode
+
+import dotenv
 import jwt
+import mysql.connector
+from fastapi import FastAPI, HTTPException, Request, status
+from fastapi.encoders import jsonable_encoder
+from fastapi.middleware.cors import CORSMiddleware
+from mysql.connector import errorcode
 
 # Loading the environment variables
 dotenv.load_dotenv()
@@ -30,11 +31,13 @@ app.add_middleware(
 )
 
 # Connect to the MySQL database
+
 try:
     cnx = mysql.connector.connect(
         user=os.environ['MYSQL_USER'],
         password=os.environ['MYSQL_PASSWORD'],
         host=os.environ['MYSQL_HOST'],
+        port=int(os.environ.get('MYSQL_PORT', 3306)),  # ✅ Add this line for port
         database=os.environ['MYSQL_DB'],
     )
     cursor = cnx.cursor()
